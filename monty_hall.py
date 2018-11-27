@@ -1,3 +1,13 @@
+"""
+Monty Hall Simulation
+
+On the TV Game Show 'Let's Make a Deal' each contestant tries to figure out which one of three doors contains a prize.  The host, Monty Hall, would ask them to pick 
+one, then he would reveal one of the doors the contestant did not choose.  This revealed door never contained the prize.  Monty Hall would then ask the contestant if they 
+would like to switch to the other door.
+
+The chances of the contestant winning are not the same for staying and switching.  Use code to determine which is the better choice.
+"""
+
 import random
 
 DOOR_COLORS = ["Red", "Blue", "Green"]
