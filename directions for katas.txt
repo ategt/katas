@@ -1,0 +1,520 @@
+Create a function taking a positive integer as its parameter and returning a string containing the Roman Numeral representation of that integer.
+
+Modern Roman numerals are written by expressing each digit separately starting with the left most digit and skipping any digit with a value of zero. In Roman numerals 1990 is rendered: 1000=M, 900=CM, 90=XC; resulting in MCMXC. 2008 is written as 2000=MM, 8=VIII; or MMVIII. 1666 uses each Roman symbol in descending order: MDCLXVI.
+
+Example:
+
+solution(1000) # should return 'M'
+Help:
+
+Symbol    Value
+I          1
+V          5
+X          10
+L          50
+C          100
+D          500
+M          1,000
+Remember that there can't be more than 3 identical symbols in a row.
+
+More about roman numerals - http://en.wikipedia.org/wiki/Roman_numerals
+
+--
+In this Kata, you will be given a string of numbers in sequence and your task will be to return the missing number. If there is no number missing or there is an error in the sequence, return -1.
+
+For example:
+
+missing("123567") = 4 
+missing("899091939495") = 92
+missing("9899101102") = 100
+missing("599600601602") = -1 -- no number missing
+missing("8990919395") = -1 -- error in sequence. Both 92 and 94 missing.
+The sequence will always be in ascending order.
+
+More examples in the test cases.
+
+Good luck!
+--
+A Narcissistic Number is a number which is the sum of its own digits, each raised to the power of the number of digits in a given base. In this Kata, we will restrict ourselves to decimal (base 10).
+
+For example, take 153 (3 digits):
+
+    1^3 + 5^3 + 3^3 = 1 + 125 + 27 = 153
+and 1634 (4 digits):
+
+    1^4 + 6^4 + 3^4 + 4^4 = 1 + 1296 + 81 + 256 = 1634
+The Challenge:
+
+Your code must return true or false depending upon whether the given number is a Narcissistic number in base 10.
+
+Error checking for text strings or other invalid inputs is not required, only valid integers will be passed into the function.
+--
+Description:
+Given an array (arr) as an argument complete the function countSmileys that should return the total number of smiling faces.
+
+Rules for a smiling face:
+-Each smiley face must contain a valid pair of eyes. Eyes can be marked as : or ;
+-A smiley face can have a nose but it does not have to. Valid characters for a nose are - or ~
+-Every smiling face must have a smiling mouth that should be marked with either ) or D.
+No additional characters are allowed except for those mentioned.
+Valid smiley face examples:
+:) :D ;-D :~)
+Invalid smiley faces:
+;( :> :} :] 
+
+Example cases:
+
+countSmileys([':)', ';(', ';}', ':-D']);       // should return 2;
+countSmileys([';D', ':-(', ':-)', ';~)']);     // should return 3;
+countSmileys([';]', ':[', ';*', ':$', ';-D']); // should return 1;
+
+Note: In case of an empty array return 0. You will not be tested with invalid input (input will always be an array). Order of the face (eyes, nose, mouth) elements will always be the same
+
+Happy coding!
+--
+What is an anagram? Well, two words are anagrams of each other if they both contain the same letters. For example:
+
+'abba' & 'baab' == true
+
+'abba' & 'bbaa' == true
+
+'abba' & 'abbba' == false
+
+'abba' & 'abca' == false
+Write a function that will find all the anagrams of a word from a list. You will be given two inputs a word and an array with words. You should return an array of all the anagrams or an empty array if there are none. For example:
+
+anagrams('abba', ['aabb', 'abcd', 'bbaa', 'dada']) => ['aabb', 'bbaa']
+
+anagrams('racer', ['crazer', 'carer', 'racar', 'caers', 'racer']) => ['carer', 'racer']
+
+anagrams('laser', ['lazing', 'lazy',  'lacer']) => []
+--
+In this kata you have to create all permutations of an input string and remove duplicates, if present. This means, you have to shuffle all letters from the input in all possible orders.
+
+Examples:
+
+permutations('a'); # ['a']
+permutations('ab'); # ['ab', 'ba']
+permutations('aabb'); # ['aabb', 'abab', 'abba', 'baab', 'baba', 'bbaa']
+The order of the permutations doesn't matter.
+--
+You are a number. But that's good for you since you live in the beautiful world, where the only living creatures are numbers. Unfortunately, a nasty zombie virus is spreading out in the digital cities. You work at the digital CDC and your job is to look over the city maps and tell which areas are contaminated by the zombie virus so the digital army would know where to drop the bombs. They are the new kind of digital zombies which can travel only in vertical and horizontal directions and infect only numbers same as them, but don't let it fool you, they're still very dangerous. Time is running out...
+
+You'll be given two-dimensional array with numbers in it. For some mysterious reason patient zero is always found in north west area of the city (element [0][0] of the matrix) and the plague spreads from there to other cells by moving left, right, up or down. You must create a function that returns a map (2-dimensional array) with all the contaminated areas marked as 1 and virus-free marked as 0.
+
+In other words: find all the matrix elements with the same value as [0][0] that you can go to by moving only down, up, right or left from [0][0] - without going into a field storing any other value.
+
+For example:
+
+var city1 = [
+    [7, 2, 3],
+    [7, 2, 3],
+    [1, 2, 7]
+];
+
+var contaminatedInCity1 = [
+    [1, 0, 0],
+    [1, 0, 0],
+    [0, 0, 0]
+];// number 7 is a zombie, but the 7 in bottom right corner is not a zombie yet - the virus didn't get there.
+
+var city2 = [
+    [9, 1, 2],
+    [9, 9, 9],
+    [7, 4, 9],
+    [7, 9, 7]
+]; 
+
+var contaminatedInCity2 = [
+    [1, 0, 0],
+    [1, 1, 1],
+    [0, 0, 1],
+    [0, 0, 0]
+];//infection inflicted the 9s, but the virus didn't get to the one in the south of the city yet.
+--
+Trolls are attacking your comment section!
+
+A common way to deal with this situation is to remove all of the vowels from the trolls' comments, neutralizing the threat.
+
+Your task is to write a function that takes a string and return a new string with all vowels removed.
+
+For example, the string "This website is for losers LOL!" would become "Ths wbst s fr lsrs LL!".
+
+Note: for this kata y isn't considered a vowel.
+--
+Deoxyribonucleic acid (DNA) is a chemical found in the nucleus of cells and carries the "instructions" for the development and functioning of living organisms.
+
+If you want to know more http://en.wikipedia.org/wiki/DNA
+
+In DNA strings, symbols "A" and "T" are complements of each other, as "C" and "G". You have function with one side of the DNA (string, except for Haskell); you need to get the other complementary side. DNA strand is never empty or there is no DNA at all (again, except for Haskell).
+
+More similar exercise are found here http://rosalind.info/problems/list-view/ (source)
+
+DNA_strand ("ATTGC") # return "TAACG"
+
+DNA_strand ("GTAT") # return "CATA"
+--
+This kata is inspired by Plants vs. Zombies, a tower defense video game developed and originally published by PopCap Games.
+
+The battlefield is the front lawn and the zombies are coming. Our defenses (consisting of pea-shooters) are in place and we've got the stats of each attacking zombie. Your job is to figure out how long it takes for them to penetrate our defenses.
+
+Mechanics
+The two images below represent the lawn (for the test example below) at separate stages in the game.
+Left: state at move 3, before shooters fire. Right:state at move 5, after shooters fire. (Moves are 0-based)
+
+example image
+Moves: During a move, new zombies appear and/or existing ones move forward one space to the left. Then the shooters fire. This two-step process repeats.
+If a zombie reaches a shooter's position, it destroys that shooter. In the example image above, the zombie at [4,4] on the left reaches the shooter at [4,2] and destroys it. The zombie has 1 health point remaining and is eliminated in the same move by the shooter at [4,0].
+Numbered shooters shoot straight (to the right) a given number of times per move. In the example image, the green numbered shooter at [0,0] fires 2 times per move.
+S-shooters shoot straight, and diagonally upward and downward (ie. three directions simultaneously) once per move. In the example image, the blue and orange S-shooters can attack zombies in any of the blue and orange squares, respectively (if not blocked by other zombies).
+At move 3 the blue shooter can only hit the zombie at [1,5] while the orange shooter hits each of the zombies at [1,5], [2,7], and [4,6] once for that move.
+Shooting Priority: The numbered shooters fire all their shots in a cluster, then the S-shooters fire their shots in order from right to left, then top to bottom. Note that once a zombie's health reaches 0 it drops immediately and does not absorb any additional shooter pellets.
+In the example image, the orange S-shooter fires before the blue one.
+Input
+Your function will receive two arguments:
+
+Lawn Map: An array/list consisting of strings, where each string represents a row of the map. Each string will consist of either " " (space character) which represents empty space, a numeric digit (0-9) representing a numbered shooter, or the letter S representing an S-shooter.
+Zombie Stats: An array of subarrays representing each zombie, in the following format:
+[i,row,hp] - where i is the move number (0-based) when it appears, row is the row the zombie walks down, and hp is the initial health point value of the zombie.
+When new zombies appear, they start at the farthest right column of their row.
+Input will always be valid.
+
+Output
+Return the number of moves before the first zombie penetrates our defenses (by getting past column 0), or null/None if all zombies are eliminated.
+
+Test Example
+lawn = [
+    '2       ',
+    '  S     ',
+    '21  S   ',
+    '13      ',
+    '2 3     '
+]
+zombies = [[0,4,28],[1,1,6],[2,0,10],[2,4,15],[3,2,16],[3,3,13]]
+plants_and_zombies(lawn,zombies); #10
+For another Tower Defense-style challenge, check out Tower Defense: Risk Analysis
+
+If you enjoyed this kata, be sure to check out my other katas.
+--
+You have an array of numbers.
+Your task is to sort ascending odd numbers but even numbers must be on their places.
+
+Zero isn't an odd number and you don't need to move it. If you have an empty array, you need to return it.
+
+Example
+
+sort_array([5, 3, 2, 8, 1, 4]) == [1, 3, 2, 8, 5, 4]
+--
+Sudoku Background
+Sudoku is a game played on a 9x9 grid. The goal of the game is to fill all cells of the grid with digits from 1 to 9, so that each column, each row, and each of the nine 3x3 sub-grids (also known as blocks) contain all of the digits from 1 to 9. 
+(More info at: http://en.wikipedia.org/wiki/Sudoku)
+
+Sudoku Solution Validator
+Write a function validSolution/ValidateSolution/valid_solution() that accepts a 2D array representing a Sudoku board, and returns true if it is a valid solution, or false otherwise. The cells of the sudoku board may also contain 0's, which will represent empty cells. Boards containing one or more zeroes are considered to be invalid solutions.
+
+The board is always 9 cells by 9 cells, and every cell only contains integers from 0 to 9.
+
+Examples
+validSolution([
+  [5, 3, 4, 6, 7, 8, 9, 1, 2],
+  [6, 7, 2, 1, 9, 5, 3, 4, 8],
+  [1, 9, 8, 3, 4, 2, 5, 6, 7],
+  [8, 5, 9, 7, 6, 1, 4, 2, 3],
+  [4, 2, 6, 8, 5, 3, 7, 9, 1],
+  [7, 1, 3, 9, 2, 4, 8, 5, 6],
+  [9, 6, 1, 5, 3, 7, 2, 8, 4],
+  [2, 8, 7, 4, 1, 9, 6, 3, 5],
+  [3, 4, 5, 2, 8, 6, 1, 7, 9]
+]); // => true
+validSolution([
+  [5, 3, 4, 6, 7, 8, 9, 1, 2], 
+  [6, 7, 2, 1, 9, 0, 3, 4, 8],
+  [1, 0, 0, 3, 4, 2, 5, 6, 0],
+  [8, 5, 9, 7, 6, 1, 0, 2, 0],
+  [4, 2, 6, 8, 5, 3, 7, 9, 1],
+  [7, 1, 3, 9, 2, 4, 8, 5, 6],
+  [9, 0, 1, 5, 3, 7, 2, 1, 4],
+  [2, 8, 7, 4, 1, 9, 6, 3, 5],
+  [3, 0, 0, 4, 8, 1, 1, 7, 9]
+]); // => false
+--
+Write a function that will solve a 9x9 Sudoku puzzle. The function will take one argument consisting of the 2D puzzle array, with the value 0 representing an unknown square.
+
+The Sudokus tested against your function will be "easy" (i.e. determinable; there will be no need to assume and test possibilities on unknowns) and can be solved with a brute-force approach.
+
+For Sudoku rules, see the Wikipedia article.
+
+puzzle = [[5,3,0,0,7,0,0,0,0],
+          [6,0,0,1,9,5,0,0,0],
+          [0,9,8,0,0,0,0,6,0],
+          [8,0,0,0,6,0,0,0,3],
+          [4,0,0,8,0,3,0,0,1],
+          [7,0,0,0,2,0,0,0,6],
+          [0,6,0,0,0,0,2,8,0],
+          [0,0,0,4,1,9,0,0,5],
+          [0,0,0,0,8,0,0,7,9]]
+
+sudoku(puzzle)
+# Should return
+ [[5,3,4,6,7,8,9,1,2],
+  [6,7,2,1,9,5,3,4,8],
+  [1,9,8,3,4,2,5,6,7],
+  [8,5,9,7,6,1,4,2,3],
+  [4,2,6,8,5,3,7,9,1],
+  [7,1,3,9,2,4,8,5,6],
+  [9,6,1,5,3,7,2,8,4],
+  [2,8,7,4,1,9,6,3,5],
+  [3,4,5,2,8,6,1,7,9]]
+--
+Write a function called sumIntervals/sum_intervals() that accepts an array of intervals, and returns the sum of all the interval lengths. Overlapping intervals should only be counted once.
+
+Intervals
+Intervals are represented by a pair of integers in the form of an array. The first value of the interval will always be less than the second value. Interval example: [1, 5] is an interval from 1 to 5. The length of this interval is 4.
+
+Overlapping Intervals
+List containing overlapping intervals:
+
+[
+   [1,4],
+   [7, 10],
+   [3, 5]
+]
+The sum of the lengths of these intervals is 7. Since [1, 4] and [3, 5] overlap, we can treat the interval as [1, 5], which has a length of 4.
+
+Examples:
+sumIntervals( [
+   [1,2],
+   [6, 10],
+   [11, 15]
+] ); // => 9
+
+sumIntervals( [
+   [1,4],
+   [7, 10],
+   [3, 5]
+] ); // => 7
+
+sumIntervals( [
+   [1,5],
+   [10, 20],
+   [1, 6],
+   [16, 19],
+   [5, 11]
+] ); // => 19
+--
+Write a function that determines whether a string is a valid guess in a Boggle board, as per the rules of Boggle. A Boggle board is a 2D array of individual characters, e.g.:
+
+[ ["I","L","A","W"],
+  ["B","N","G","E"],
+  ["I","U","A","O"],
+  ["A","S","R","L"] ]
+Valid guesses are strings which can be formed by connecting adjacent cells (horizontally, vertically, or diagonally) without re-using any previously used cells.
+
+For example, in the above board "BINGO", "LINGO", and "ILNBIA" would all be valid guesses, while "BUNGIE", "BINS", and "SINUS" would not.
+
+Your function should take two arguments (a 2D array and a string) and return true or false depending on whether the string is found in the array as per Boggle rules.
+
+Test cases will provide various array and string sizes (squared arrays up to 150x150 and strings up to 150 uppercase letters). You do not have to check whether the string is a real word or not, only if it's a valid guess.
+--
+There are several difficulty of sudoku games, we can estimate the difficulty of a sudoku game based on how many cells are given of the 81 cells of the game.
+
+Easy sudoku generally have over 32 givens
+Medium sudoku have around 30–32 givens
+Hard sudoku have around 28–30 givens
+Very Hard sudoku have less than 28 givens
+Note: The minimum of givens required to create a unique (with no multiple solutions) sudoku game is 17.
+
+A hard sudoku game means that at start no cell will have a single candidates and thus require guessing and trial and error. A very hard will have several layers of multiple candidates for any empty cell.
+
+Task:
+Write a function that solves sudoku puzzles of any difficulty. The function will take a sudoku grid and it should return a 9x9 array with the proper answer for the puzzle.
+
+Or it should raise an error in cases of: invalid grid (not 9x9, cell with values not in the range 1~9); multiple solutions for the same puzzle or the puzzle is unsolvable
+
+Python users: python 2 has been disabled.
+--
+The problem
+How many zeroes are at the end of the factorial of 10? 10! = 3628800, i.e. there are 2 zeroes. 16! (or 0x10!) in hexadecimal would be 0x130777758000, which has 3 zeroes.
+
+Scalability
+Unfortunately, machine integer numbers has not enough precision for larger values. Floating point numbers drop the tail we need. We can fall back to arbitrary-precision ones - built-ins or from a library, but calculating the full product isn't an efficient way to find just the tail of a factorial. Calculating 100'000! in compiled language takes around 10 seconds. 1'000'000! would be around 10 minutes, even using efficient Karatsuba algorithm
+
+Your task
+is to write a function, which will find the number of zeroes at the end of (number) factorial in arbitrary radix = base for larger numbers.
+
+base is an integer from 2 to 256
+number is an integer from 1 to 1'000'000
+Note Second argument: number is always declared, passed and displayed as a regular decimal number. If you see a test described as 42! in base 20 it's 4210 not 4220 = 8210.
+--
+In a grid of 4 by 4 squares you want to place a skyscraper in each square with only some clues:
+
+The height of the skyscrapers is between 1 and 4
+No two skyscrapers in a row or column may have the same number of floors
+A clue is the number of skyscrapers that you can see in a row or column from the outside
+Higher skyscrapers block the view of lower skyscrapers located behind them
+
+Can you write a program that can solve this puzzle? 
+
+Example: 
+
+To understand how the puzzle works, this is an example of a row with 2 clues. Seen from the left side there are 4 buildings visible while seen from the right side only 1: 
+
+ 4	    	    	    	    	 1
+
+There is only one way in which the skyscrapers can be placed. From left-to-right all four buildings must be visible and no building may hide behind another building: 
+
+ 4	 1	 2	 3	 4	 1
+
+Example of a 4 by 4 puzzle with the solution: 
+
+  	    	    	 1	 2	  
+  	  	  	  	  	  
+  	  	  	  	  	 2
+ 1	  	  	  	  	  
+  	  	  	  	  	  
+  	  	  	 3	  	  
+
+  	  	  	 1	 2	  
+  	 2	 1	 4	 3	  
+  	 3	 4	 1	 2	 2
+ 1	 4	 2	 3	 1	  
+  	 1	 3	 2	 4	  
+  	  	  	 3	  	  
+
+Task: 
+
+Finish:
+function solvePuzzle(clues)
+Pass the clues in an array of 16 items. This array contains the clues around the clock, index: 
+  	 0	 1	   2	   3	  
+ 15	  	  	  	  	 4
+ 14	  	  	  	  	 5
+ 13	  	  	  	  	 6
+ 12	  	  	  	  	 7
+  	11	10	 9	 8	  
+If no clue is available, add value 0
+Each puzzle has only one possible solution
+SolvePuzzle() returns matrix int[][]. The first indexer is for the row, the second indexer for the column. (Python: returns 4-tuple of 4-tuples, Ruby: 4-Array of 4-Arrays)
+If you finished this kata you can use your solution as a base for the more challenging kata: 6 By 6 Skyscrapers
+--
+In a grid of 6 by 6 squares you want to place a skyscraper in each square with only some clues:
+
+The height of the skyscrapers is between 1 and 6
+No two skyscrapers in a row or column may have the same number of floors
+A clue is the number of skyscrapers that you can see in a row or column from the outside
+Higher skyscrapers block the view of lower skyscrapers located behind them
+
+Can you write a program that can solve each 6 by 6 puzzle? 
+
+Example: 
+
+To understand how the puzzle works, this is an example of a row with 2 clues. Seen from the left there are 6 buildings visible while seen from the right side only 1: 
+
+6	  	  	  	  	  	  	1
+
+There is only one way in which the skyscrapers can be placed. From left-to-right all six buildings must be visible and no building may hide behind another building: 
+
+6	1	2	3	4	5	6	1
+
+Example of a 6 by 6 puzzle with the solution: 
+
+  	   	   	   	2	2	   	  
+  	  	  	  	  	  	  	  
+  	  	  	  	  	  	  	  
+3	  	  	  	  	  	  	  
+  	  	  	  	  	  	  	6
+4	  	  	  	  	  	  	3
+4	  	  	  	  	  	  	  
+  	  	  	  	  	4	  	  
+
+  	  	  	  	2	2	  	  
+  	5	6	1	4	3	2	  
+  	4	1	3	2	6	5	  
+3	2	3	6	1	5	4	  
+  	6	5	4	3	2	1	6
+4	1	2	5	6	4	3	3
+4	3	4	2	5	1	6	  
+  	  	  	  	  	4	  	  
+
+Task: 
+
+Finish:
+function solvePuzzle(clues)
+Pass the clues in an array of 24 items. The clues are in the array around the clock. Index: 
+0	1	2	3	4	5	
+23							6
+22							7
+21							8
+20							9
+19							10
+18							11
+17	16	15	14	13	12	
+If no clue is available, add value 0
+Each puzzle has only one possible solution
+SolvePuzzle() returns matrix int[][]. The first indexer is for the row, the second indexer for the column. Python returns a 6-tuple of 6-tuples, Ruby a 6-Array of 6-Arrays.
+--
+Task
+You are at start location [0, 0] in mountain area of NxN and you can only move in one of the four cardinal directions (i.e. North, East, South, West). Return minimal number of climb rounds to target location [N-1, N-1]. Number of climb rounds between adjacent locations is defined as difference of location altitudes (ascending or descending).
+
+Location altitude is defined as an integer number (0-9).
+--
+Note: This kata is the improved/corrected version of this one.
+I'm not the original author but, while the former has quit codewars without correcting the bugs in his kata and letting it inconsistent with the description, the latter took a lot of time to debug the thing and improve it (the original algorithm didn't have full coverage), so I published it on my side (and that will make the maintenance easier...).
+
+Enjoy!
+
+
+
+I don't even know what they look like. 
+Furling... Sounds cute and fuzzy to me. 
+
+- Jonas Quinn and Jack O'Neill, "Paradise Lost".
+
+
+Previously on Stargate SG-1
+Arriving on P4F-976, SG-1 finally come into contact with the Furlings, one of the four great races within the Milky Way. After several days of deliberation with the Furling Directorate, the Tauri finally have access to the knowledge they have been searching for.
+
+The Furlings, having provided assistance with the Ancient's expansion into the Milky Way, have extensive knowledge of the Stargate Network and it's components. One such component, the Dial Home Device, has caused many disasters at Stargate Command through it's absence. Thankfully, the Furlings have all the necessary blueprints for it's construction, and have handed copies over to the Tauri. After beginning mass production of the control crystals necessary for it's function, Stargate Command has hit a snag. The Ancients had designed the control crystals to function if their inner pathways are as efficient as possible - essentially, the pathways must choose the shortest path between two nodes. Stargate Command has turned to you - a software engineer - to fix their problems.
+
+
+
+Your Mission
+Given a string containing the current state of the control crystals inner pathways (labeled as "X") and its gaps (labeled as "."), generate the shortest path from the start node (labeled as "S") to the goal node (labeled as "G") and return the new pathway (labeled with "P" characters).
+If no solution is possible, return the string "Oh for crying out loud..." (in frustration).
+
+
+
+The Rules
+Nodes labeled as "X" are not traversable.
+Nodes labeled as "." are traversable.
+A pathway can be grown in eight directions (up, down, left, right, up-left, up-right, down-left, down-right), so diagonals are possible.
+Nodes labeled "S" and "G" are not to be replaced with "P" in the case of a solution.
+The shortest path is defined as the path with the shortest euclidiean distance going from one node to the next.
+If several paths are possible with the same shortest distance, return any one of them.
+Note that the mazes won't always be squares.
+
+
+Example #1: Valid solution
+
+.S...             .SP..
+XXX..             XXXP.
+.X.XX      =>     .XPXX
+..X..             .PX..
+G...X             G...X
+
+Example #2: No solution
+
+S....      
+XX...      
+...XX      =>     "Oh for crying out loud..."
+.XXX.      
+XX..G
+
+
+
+Note: Your solution will have to be efficient because it will have to deal with a lot of maps and big ones.
+Caracteristics of the random tests:
+
+map sizes from 3x3 to 73x73 (step is 5 from one size to the other, mazes won't always be squares)
+20 random maps for each size.
+Overall, 311 tests to pass with the fixed ones.

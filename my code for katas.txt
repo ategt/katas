@@ -1,0 +1,1778 @@
+6 kyu
+Roman Numerals Encoder
+
+Ruby
+@roman_symbols = ['I', 'V', 'X', 'L', 'C', 'D', 'M', 'MMMMM', 'MMMMMMMMMM']  # I know the last two are wrong, but I liked placeholders better than a custom if.
+
+def solution(number)
+  accumulator =
+    number.to_s.reverse.each_char.with_index.map do |letter, index|
+      character_map(letter.to_i, *@roman_symbols[index * 2, 3])
+    end
+  accumulator.reverse.join  
+end
+
+def character_map(input_int, single, half, higher_single)
+  if input_int <= 3
+    single * input_int
+  elsif input_int == 4
+    single + half
+  elsif input_int >= 5 and input_int <= 8
+    half + single * (input_int - 5)
+  elsif input_int == 9
+    single + higher_single
+  else
+    raise
+  end
+end
+Python
+def romanize(input):
+    accumulator = []
+    reversed_string = str(input)[::-1]
+    for index, letter in  enumerate(reversed_string):
+        int_letter = int(letter)
+        # print(letter, " - ", index)
+        if index == 0:
+            accumulator.append( characterMap(int_letter, 'I', 'V', 'X') )
+        elif index == 1:
+            accumulator.append( characterMap(int_letter, 'X', 'L', 'C') )
+        elif index == 2:
+            accumulator.append( characterMap(int_letter, 'C', 'D', 'M') )
+        elif index == 3:
+            accumulator.append( characterMap(int_letter, 'M', 'D', 'M') )
+    return "".join(list(reversed(accumulator)))
+    
+def characterMap(fint, single, half, higher_single):
+    if fint <= 3:
+        return single * fint
+    elif fint == 4:
+        return single + half
+    elif fint >= 5 and fint <= 8:
+        return half + single * (fint - 5)
+    elif fint == 9:
+        return single + higher_single
+        
+def solution(n):
+    return romanize(n)
+          
+roman_numeral_symbols = 'IVXLCDM'
+
+def solution(input):
+    accumulator = []
+    reversed_string = reversed(str(input))
+    for index, letter in  enumerate(reversed_string):
+        accumulator.append( characterMap(int(letter), *roman_numeral_symbols[index * 2 : index * 2 + 3]))
+    return "".join(list(reversed(accumulator)))
+    
+def characterMap(fint, single, half = None, higher_single = None):
+    if fint <= 3:
+        return single * fint
+    elif fint == 4:
+        return single + half
+    elif fint >= 5 and fint <= 8:
+        return half + single * (fint - 5)
+    elif fint == 9:
+        return single + higher_single
+
+--
+5 kyu
+Simple number sequence
+Ruby
+def missing s
+  maximum_number_length = s.length / 3
+  options =
+    (1..maximum_number_length).
+                            to_a.
+                            select { |starting_digits| test_plaussibility(starting_digits, s) } .
+                            map { |starting_digit_count| find_missing(starting_digit_count, s) } .
+                            select { |nillables| !nillables.nil? }
+                            
+  return options.last if options.one?
+  -1
+end
+
+def test_plaussibility digit_count, s
+  test_integer = s[0, digit_count].to_i
+  s =~ /\A(#{test_integer}#{test_integer+1}|#{test_integer}#{test_integer+2}#{test_integer+3}).*/
+end
+
+def find_missing starting_digit_count, s
+  missings = []
+  current_int = s[0, starting_digit_count].to_i
+  test_s = current_int.to_s
+  while test_s.length < s.length
+    current_int += 1
+    test_s += current_int.to_s
+    if !s.start_with? test_s
+      missings << current_int
+      break if missings.size > 1
+      test_s = test_s.sub(current_int.to_s,'')
+    end
+  end
+  missings.last if missings.one?
+end
+
+--
+6 kyu
+Does my number look big in this?
+def narcissistic?( value )
+  value == value.
+                to_s.
+                reverse.
+                each_char.
+                map { |char| char.to_i ** value.to_s.length } .
+                reduce(0) { |accum, number| accum + number }
+end
+--
+6 kyu
+Count the smiley faces!
+Ruby
+def count_smileys(arr)
+  arr.select { |item| item =~ /(:|;)(-|~)?(\)|D)/ } .size
+end
+--
+5 kyu
+Where my anagrams at?
+Ruby
+def anagrams(word, words)
+  words.select { |input| input.split('').sort == word.split('').sort }
+end
+--
+4 kyu
+Permutations
+Ruby
+def permutations(head, tail='', depth=0)
+  letters = head.split('').length
+  if letters < 1
+    tail
+  else
+    (0...letters).map do |iteration|
+      temp_string = head.dup
+      swap_char = temp_string.slice! iteration
+      permutations(temp_string, "#{tail}#{swap_char}", depth+1)
+    end.flatten.uniq
+  end
+end
+Python
+def permutations(head, tail='', depth=0):
+  letters = len(head)
+  if letters < 1:
+    return tail
+  else:
+    alist = [permutations(head[0: iteration] + head[iteration+1:], tail+head[iteration], depth+1) for iteration in range(letters)]
+    return list(set(flatten(alist))) if isinstance(alist[0], list) else alist
+
+    
+def flatten(alist):
+    return [item for sublist in alist for item in sublist]
+JavaScript
+function flatten(input) {
+  const stack = [...input];
+  const res = [];
+  while (stack.length) {
+    // pop value from stack
+    const next = stack.pop();
+    if (Array.isArray(next)) {
+      // push back array items, won't modify the original input
+      stack.push(...next);
+    } else {
+      res.push(next);
+    }
+  }
+  //reverse to restore input order
+  return res.reverse();
+}
+
+function permutations(head, tail='', depth=0){
+  var letters = head.split('').length
+  if(letters < 1){
+    return tail
+  } else {
+    return [...new Set(flatten(head.split('').map(function(item, index){
+      var alist = permutations(head.substr(0, index) + head.substr(index+1), tail+head[index], depth+1)
+      return alist
+    })))]
+  }
+}
+--
+5 kyu
+Stop the Zombie Apocalypse!
+JavaScript
+function process(input_matrix) {
+    var result_matrix = initalize_result(input_matrix)
+    var origin_number = input_matrix[0][0]
+
+    var old_result_count = -1
+    var new_result_count = 0
+
+    while(old_result_count < new_result_count){
+      var temp_result_matrix = result_matrix.map(function(row, y){ 
+        return row.map(function(item, x){
+          if( detect( x, y, input_matrix, result_matrix, origin_number )){
+            return 1
+          } else {
+            return 0
+          }
+        })
+      })
+
+      old_result_count = flatten(result_matrix).filter(function(item) { return item == 1 }).length
+      result_matrix = merge_matrices(result_matrix, temp_result_matrix)
+      new_result_count = flatten(result_matrix).filter(function(item) { return item == 1 }).length
+    }
+
+    return result_matrix
+}
+
+function initalize_result(input_matrix) {
+  var result = input_matrix.map(function(y){ return y.map(function(x){ return 0 }) })
+  result[0][0] = 1
+  return result
+}
+
+function merge_matrices(source, additional){
+  return source.map(function(row, y){
+    return row.map(function(item, x) {
+      if(item == 1 || additional[y][x] == 1){
+        return 1
+      } else {
+        return 0
+      }
+    })
+  })
+}
+
+function detect(x, y, input_matrix, result_matrix, origin_number){
+  if(input_matrix[y][x] == origin_number){
+    if(x - 1 >= 0 && result_matrix[y][x-1] == 1){
+      return true
+    } else if( x + 1 < input_matrix[y].length && result_matrix[y][x + 1] == 1) {
+      return true
+    } else if (y - 1 >= 0 && result_matrix[y-1][x] == 1) {
+      return true
+    } else if (y + 1 < input_matrix.length && result_matrix[y+1][x] == 1) {
+      return true
+    } else {
+      return false
+    }  
+  } else {
+    return false
+  }
+}
+    
+function flatten(input) {
+  const stack = [...input];
+  const res = [];
+  while (stack.length) {
+    // pop value from stack
+    const next = stack.pop();
+    if (Array.isArray(next)) {
+      // push back array items, won't modify the original input
+      stack.push(...next);
+    } else {
+      res.push(next);
+    }
+  }
+  //reverse to restore input order
+  return res.reverse();
+}
+
+function findZombies(matrix) {
+  return process(matrix)
+}
+--
+7 kyu
+Disemvowel Trolls
+JavaScript
+function disemvowel(str) {
+  return str.replace(/(a|e|i|o|u)/gi, '');
+}
+
+--
+7 kyu
+Complementary DNA
+Deoxyribonucleic acid (DNA) is a chemical found in the nucleus of cells and carries the "instructions" for the development and functioning of living organisms.
+
+If you want to know more http://en.wikipedia.org/wiki/DNA
+
+In DNA strings, symbols "A" and "T" are complements of each other, as "C" and "G". You have function with one side of the DNA (string, except for Haskell); you need to get the other complementary side. DNA strand is never empty or there is no DNA at all (again, except for Haskell).
+
+More similar exercise are found here http://rosalind.info/problems/list-view/ (source)
+
+DNA_strand ("ATTGC") # return "TAACG"
+
+DNA_strand ("GTAT") # return "CATA"
+--
+3 kyu
+Plants and Zombies
+Python
+# coding: utf-8
+
+def advance_zombies(zombies):
+    local_zombies = [zombie.copy() for zombie in zombies]
+    for zombie in local_zombies:
+        zombie[0] -= 1
+    return local_zombies
+
+def determine_breach(zombies):
+    return 0 < len(list(filter(lambda zombie: zombie[0] < 0, zombies)))
+
+def destroy_occupied_shooters(lawn, zombies):
+    new_rows = []
+    for row_number, row in enumerate(lawn):
+        new_row = "%s" % (row,)
+        for column_number, cell in enumerate(row):
+            if cell.isalnum():
+                if len(list(filter(lambda zombie: zombie[0] == column_number and zombie[1] == row_number, zombies))) > 0:
+                    new_row = new_row[:column_number] + ' ' + new_row[column_number+1:]
+
+        new_rows.append(new_row)        
+               
+    return new_rows
+
+def activated_zombies(move, zombies, lawn):
+    actives = filter(lambda zombie: zombie[0] == move, zombies)
+    actives = [zombie.copy() for zombie in actives]
+    actives = [ [len(lawn[0]) - 1, zombie[1], zombie[2]] for zombie in actives]
+    return actives
+
+def direct_shooters_fire(lawn, active_zombies):
+    local_zombies = [zombie.copy() for zombie in active_zombies]
+    for row_number, row in enumerate(lawn):
+        for shooter in row:
+            if shooter.isnumeric():
+                shots = int(shooter)
+                
+                zombies_in_row = list(filter(lambda zombie: zombie[1] == row_number, local_zombies))
+
+                while shots > 0:
+                    if len(zombies_in_row) > 0:
+                        hp = zombies_in_row[0][2]
+                        if hp > shots:
+                            zombies_in_row[0][2] = hp - shots
+                            shots = 0
+                        else:
+                            shots -= hp
+                            eliminated_zombie = zombies_in_row.pop(0)
+                            local_zombies = [ *filter(lambda zombie: zombie != eliminated_zombie, local_zombies)]
+                    else:
+                        shots = 0
+                        
+    return local_zombies
+
+def locate_s_shooters(lawn):
+    strafers = []
+    for row_number, row in enumerate(lawn):
+        for column_number, cell in enumerate(row):
+            if cell.isalpha():
+                strafers.append({'row': row_number, 'column':column_number})
+                
+    return strafers                
+            
+def prioritize_s_shooters(s_shooters):
+    return sorted(s_shooters, key=lambda item: item['column'] * 1000 - item['row'], reverse=True)
+            
+def angular_shooters_fire(row_number, column_number, active_zombies, lawn):
+    local_zombies = [zombie.copy() for zombie in active_zombies]
+    
+    zombies_in_row = list(filter(lambda zombie: zombie[1] == row_number, local_zombies))
+    
+    forward_zombie = zombies_in_row[0] if len(zombies_in_row) > 0 else None
+
+    upper_zombie = locate_zombie(lawn, row_number, column_number, local_zombies, next_coords_func=lambda row, column: (row-1,column+1))
+    lower_zombie = locate_zombie(lawn, row_number, column_number, local_zombies, next_coords_func=lambda row, column: (row+1,column+1))
+
+    zombies_getting_hit = [zombie for zombie in [lower_zombie, upper_zombie, forward_zombie] if zombie is not None and len(zombie) > 0]
+  
+    for zombie in zombies_getting_hit:
+        hp = zombie[2]
+        if hp > 1:
+            zombie[2] -= 1
+        else:
+            eliminated_zombie = zombie
+            local_zombies = [ *filter(lambda this_zombie: this_zombie != eliminated_zombie, local_zombies)]
+            
+    return local_zombies
+
+def locate_zombie(lawn, row, column, zombies, next_coords_func):
+    """
+        # Zombie up one would be column_number + 1, row_number - 1
+        next_coords_func = lambda 
+    """
+    zombie = None
+    while zombie is None:
+        row, column = next_coords_func(row, column)
+
+        if row < 0 or row > len(lawn):
+            break
+        if column < 0 or column > len(lawn[0]):
+            break
+
+        zombie = [*filter(lambda zombie: zombie[1] == row and zombie[0] == column, zombies), None][0]
+    return zombie
+
+def run(lawn, zombies):
+    active_zombies = []
+    moves = 0
+    max_moves_required = max(map(lambda zombie: zombie[0], zombies))
+
+    while moves <= max_moves_required or len(active_zombies) > 0:
+        # advance existing zombies
+        active_zombies = advance_zombies(active_zombies)
+
+        # determine if zombies breached lawn
+        if determine_breach(active_zombies):
+            # print("Breach!!!!!!!")
+            return moves
+
+        # destroy shooters with zombies on top of them
+        lawn = destroy_occupied_shooters(lawn, active_zombies)
+
+        active_zombies = [*active_zombies , *activated_zombies(moves, zombies, lawn)]
+
+        active_zombies = direct_shooters_fire(lawn, active_zombies)
+        straffing_shooters = locate_s_shooters(lawn)
+        straffing_shooters = prioritize_s_shooters(straffing_shooters)
+
+        for shooter in straffing_shooters:
+            active_zombies = angular_shooters_fire(shooter['row'], shooter['column'], active_zombies, lawn)
+
+        moves += 1
+    
+    # print("All Zombies Eliminated.")
+
+    return None
+
+def display_battlefield(lawn, active_zombies):
+    print("  '", "".join([str(i) for i in range(len(lawn[0]))]), "|  --")
+
+    for row_number, row in enumerate(lawn):
+        these_zombies = filter(lambda zombie: zombie[1] == row_number, active_zombies)
+        print(row_number, "'", row, "|", list(these_zombies))
+    print("")
+
+def plants_and_zombies(lawn,zombies):
+    return run(lawn, zombies)
+--
+6 kyu
+Sort the odd
+Python
+def sort_array(source_array):
+    odds = list(filter(lambda number: number % 2 != 0, source_array))
+    odds = sorted(odds)
+    return [number if number % 2 == 0 else odds.pop(0) for number in source_array]
+--
+4 kyu
+Sudoku Solution Validator
+Python
+# coding: utf-8
+
+from functools import reduce
+import random
+
+blank_row = lambda: [None] * 9
+blank_grid = lambda: [blank_row() for _ in range(9)]
+valid_numbers = lambda: reduce(lambda acc, item: [*acc, item], range(1,10), [])
+remove_nones = lambda x: x is not None
+
+def clone_grid(donor_grid):
+    recipient_grid = blank_grid()
+    for y in range(len(donor_grid)):
+        for x in range(len(donor_grid[0])):
+            recipient_grid[y][x] = donor_grid[y][x]
+
+    return recipient_grid            
+
+def set_coords(grid, col, row, value):
+    grid[row][col] = value
+    return grid
+
+def get_row(grid, row_num):
+    return grid[row_num-1]
+
+def get_block_number(col_num, row_num):
+    """
+        Blocks are 1 based:
+            1 2 3
+            4 5 6
+            7 8 9
+    """
+    bc = ( col_num - 1 ) // 3
+    br = ( row_num - 1 ) // 3
+    
+    block_number = br * 3 + bc + 1
+    return block_number
+
+def get_col(grid, col_num):
+    return [ col for row_num, row in enumerate(grid) for test_col_num, col in enumerate(row) if test_col_num + 1 == col_num ]
+
+def random_valid_numbers():
+    vns = valid_numbers()
+    random.shuffle(vns)
+    return vns
+
+def get_used(grid, col_num, row_num):
+    block = get_block(grid, col_num=col_num, row_num=row_num)
+    row = get_row(grid, row_num=row_num)
+    colum = get_col(grid, col_num=col_num)
+    
+    return list(filter(remove_nones, [*block, *row, *colum]))
+
+def get_block(grid, col_num, row_num):
+    block_number = get_block_number(col_num=col_num, row_num=row_num)
+    return [ col for row_num, row in enumerate(grid) for col_num, col in enumerate(row) if get_block_number(col_num + 1, row_num + 1) == block_number ]
+        
+def get_coords_from_idx(index):
+    row_num = ( index - 1 ) // 9 + 1
+    col_num = ( index - 1 ) % 9 + 1
+    return col_num, row_num
+
+def get_index_from_coords(col_num, row_num):
+    return ( row_num - 1 ) * 9 + col_num
+
+def valid(grid, col_num, row_num, value = None):
+    test_value = grid[row_num-1][col_num-1] if value is None else value
+    
+    block = get_block(grid, col_num, row_num)
+    row = get_row(grid, row_num=row_num)
+    colum = get_col(grid, col_num=col_num)
+    
+    return test_value not in block and test_value not in row and test_value not in colum
+
+def recursive_grid_populator(grid, index = 1):
+    if index > 81:
+        return True, grid
+
+    col_num, row_num = get_coords_from_idx(index)
+    
+    for value in random_valid_numbers():
+        if valid(grid, row_num=row_num, col_num=col_num, value = value):
+            # The one we are attempting is possible.
+            temp_grid = clone_grid(grid)
+            temp_grid[row_num-1][col_num-1] = value
+            working_out, filled_in_grid = recursive_grid_populator(temp_grid, index = get_index_from_coords(row_num=row_num, col_num=col_num) + 1)
+            
+            if working_out:
+                return working_out, filled_in_grid
+
+    # Grid Not valid
+    return False, grid
+
+def mask_grid_to_puzzle(grid, cells=None, verbose=False, **kwargs):
+    grid = clone_grid(grid)
+
+    indexes = reduce(lambda acc, item: [*acc, item], range(1,82), [])
+    random.shuffle(indexes)
+
+    for ix, index in enumerate(indexes):
+        col_num, row_num = get_coords_from_idx(index)
+        temp_grid = clone_grid(grid)
+        temp_grid[col_num-1][row_num-1] = None
+
+        if verbose:
+            print("Testing ", ix, " Values Given", _values_given(temp_grid))
+
+        if is_puzzle_solution_unique(temp_grid):
+            grid = temp_grid
+
+        if cells is not None and _values_given(grid) == cells:
+            return grid
+        
+    return grid
+
+def solve_grid(grid):
+    solutions = recursive_grid_solver(grid)
+
+    if len(solutions) == 1:
+        return solutions[0]
+    else:
+        raise Exception("Sudoku Puzzle Appears Unsolvable.")
+
+def recursive_grid_solver(grid, results=[], index = 1):
+    if index > 81:
+        results.append(clone_grid(grid))
+        if len(results) > 1:
+            raise ManySolutionsException()
+        return results
+
+    col_num, row_num = get_coords_from_idx(index)
+    
+    values = None
+    if grid[row_num-1][col_num-1] is None:
+        used = get_used(grid, col_num, row_num)
+        values = possible_values(used)
+    else:
+        values = [grid[row_num-1][col_num-1]]
+    
+    for value in values:
+        if grid[row_num-1][col_num-1] is not None or valid(grid, row_num=row_num, col_num=col_num, value = value):
+            # The one we are attempting is possible.
+            temp_grid = clone_grid(grid)
+            temp_grid[row_num-1][col_num-1] = value
+            results = recursive_grid_solver(temp_grid, results = results, index = get_index_from_coords(row_num=row_num, col_num=col_num) + 1)
+
+    return results
+
+def possible_values(used):
+    return list(filter(lambda item: item not in used, valid_numbers()))
+
+def is_puzzle_solution_unique(grid):
+    try:
+        _solutions = recursive_grid_solver(grid, results=[])
+        return True
+    except ManySolutionsException:
+        return False
+
+def rate_puzzle(grid):
+    starting_values_count = _values_given(grid)
+
+    print(starting_values_count, "Starting Values")
+
+    if starting_values_count > 23:
+        return "Easy"
+    elif starting_values_count > 20:
+        return "Medium"
+    elif starting_values_count > 17:
+        return "Hard"
+    else:
+        return "Very Hard"
+
+def _values_given(grid):
+    flattened_grid = reduce(lambda accum, item: [*accum, *item], grid, [])
+    values = list(filter(remove_nones, flattened_grid))
+    starting_values_count = len(values)
+    return starting_values_count
+
+def build_sudoku(**kwargs):
+    grid = blank_grid()
+    _valid, result = recursive_grid_populator(grid)
+
+    if kwargs.get('debug', False):
+        import json
+        print(json.dumps(result))
+
+    puzzle = mask_grid_to_puzzle(result, **kwargs)
+
+    print("Puzzle is ", rate_puzzle(puzzle))
+
+    return puzzle, result
+
+class ManySolutionsException(Exception):
+    """Exception for error raised by Sudoku Puzzle Having Too Many Solutions"""
+    def __init__(self, msg="Sudoku Puzzle has Too Many Solutions"):
+        super(ManySolutionsException, self).__init__(msg)
+
+def validSolution(grid):
+    for index in range(1, 82):
+        col_num, row_num = get_coords_from_idx(index)
+
+        value = grid[row_num-1][col_num-1]
+    
+        temp_grid = clone_grid(grid)
+        temp_grid[row_num-1][col_num-1] = None
+
+        if not valid(temp_grid, row_num=row_num, col_num=col_num, value = value):
+            return False
+
+    return True
+--
+3 kyu
+Sudoku Solver
+Python
+# coding: utf-8
+
+from functools import reduce
+import random
+
+blank_row = lambda: [None] * 9
+blank_grid = lambda: [blank_row() for _ in range(9)]
+valid_numbers = lambda: reduce(lambda acc, item: [*acc, item], range(1,10), [])
+remove_nones = lambda x: x is not None
+
+def clone_grid(donor_grid):
+    recipient_grid = blank_grid()
+    for y in range(len(donor_grid)):
+        for x in range(len(donor_grid[0])):
+            recipient_grid[y][x] = donor_grid[y][x]
+
+    return recipient_grid            
+
+def set_coords(grid, col, row, value):
+    grid[row][col] = value
+    return grid
+
+def get_row(grid, row_num):
+    return grid[row_num-1]
+
+def get_block_number(col_num, row_num):
+    """
+        Blocks are 1 based:
+            1 2 3
+            4 5 6
+            7 8 9
+    """
+    bc = ( col_num - 1 ) // 3
+    br = ( row_num - 1 ) // 3
+    
+    block_number = br * 3 + bc + 1
+    return block_number
+
+def get_col(grid, col_num):
+    return [ col for row_num, row in enumerate(grid) for test_col_num, col in enumerate(row) if test_col_num + 1 == col_num ]
+
+def random_valid_numbers():
+    vns = valid_numbers()
+    random.shuffle(vns)
+    return vns
+
+def get_used(grid, col_num, row_num):
+    block = get_block(grid, col_num=col_num, row_num=row_num)
+    row = get_row(grid, row_num=row_num)
+    colum = get_col(grid, col_num=col_num)
+    
+    return list(filter(remove_nones, [*block, *row, *colum]))
+
+def get_block(grid, col_num, row_num):
+    block_number = get_block_number(col_num=col_num, row_num=row_num)
+    return [ col for row_num, row in enumerate(grid) for col_num, col in enumerate(row) if get_block_number(col_num + 1, row_num + 1) == block_number ]
+        
+def get_coords_from_idx(index):
+    row_num = ( index - 1 ) // 9 + 1
+    col_num = ( index - 1 ) % 9 + 1
+    return col_num, row_num
+
+def get_index_from_coords(col_num, row_num):
+    return ( row_num - 1 ) * 9 + col_num
+
+def valid(grid, col_num, row_num, value = None):
+    test_value = grid[row_num-1][col_num-1] if value is None else value
+    
+    block = get_block(grid, col_num, row_num)
+    row = get_row(grid, row_num=row_num)
+    colum = get_col(grid, col_num=col_num)
+    
+    return test_value not in block and test_value not in row and test_value not in colum
+
+def recursive_grid_populator(grid, index = 1):
+    if index > 81:
+        return True, grid
+
+    col_num, row_num = get_coords_from_idx(index)
+    
+    for value in random_valid_numbers():
+        if valid(grid, row_num=row_num, col_num=col_num, value = value):
+            # The one we are attempting is possible.
+            temp_grid = clone_grid(grid)
+            temp_grid[row_num-1][col_num-1] = value
+            working_out, filled_in_grid = recursive_grid_populator(temp_grid, index = get_index_from_coords(row_num=row_num, col_num=col_num) + 1)
+            
+            if working_out:
+                return working_out, filled_in_grid
+
+    # Grid Not valid
+    return False, grid
+
+def mask_grid_to_puzzle(grid, cells=None, verbose=False, **kwargs):
+    grid = clone_grid(grid)
+
+    indexes = reduce(lambda acc, item: [*acc, item], range(1,82), [])
+    random.shuffle(indexes)
+
+    for ix, index in enumerate(indexes):
+        col_num, row_num = get_coords_from_idx(index)
+        temp_grid = clone_grid(grid)
+        temp_grid[col_num-1][row_num-1] = None
+
+        if verbose:
+            print("Testing ", ix, " Values Given", _values_given(temp_grid))
+
+        if is_puzzle_solution_unique(temp_grid):
+            grid = temp_grid
+
+        if cells is not None and _values_given(grid) == cells:
+            return grid
+        
+    return grid
+
+def solve_grid(grid):
+    solutions = recursive_grid_solver(grid)
+
+    if len(solutions) == 1:
+        return solutions[0]
+    else:
+        raise Exception("Sudoku Puzzle Appears Unsolvable.")
+
+def recursive_grid_solver(grid, results=[], index = 1):
+    if index > 81:        
+        results.append(clone_grid(grid))
+        if len(results) > 1:
+            raise ManySolutionsException(solution=clone_grid(grid))
+        return results
+
+    col_num, row_num = get_coords_from_idx(index)
+    
+    values = None
+    if grid[row_num-1][col_num-1] is None:
+        used = get_used(grid, col_num, row_num)
+        values = possible_values(used)
+    else:
+        values = [grid[row_num-1][col_num-1]]
+    
+    for value in values:
+        if grid[row_num-1][col_num-1] is not None or valid(grid, row_num=row_num, col_num=col_num, value = value):
+            # The one we are attempting is possible.
+            temp_grid = clone_grid(grid)
+            temp_grid[row_num-1][col_num-1] = value
+            results = recursive_grid_solver(temp_grid, results = results, index = get_index_from_coords(row_num=row_num, col_num=col_num) + 1)
+
+    return results
+
+def possible_values(used):
+    return list(filter(lambda item: item not in used, valid_numbers()))
+
+def is_puzzle_solution_unique(grid):
+    try:
+        _solutions = recursive_grid_solver(grid, results=[])
+        return True
+    except ManySolutionsException:
+        return False
+
+def rate_puzzle(grid):
+    starting_values_count = _values_given(grid)
+
+    print(starting_values_count, "Starting Values")
+
+    if starting_values_count > 23:
+        return "Easy"
+    elif starting_values_count > 20:
+        return "Medium"
+    elif starting_values_count > 17:
+        return "Hard"
+    else:
+        return "Very Hard"
+
+def _values_given(grid):
+    flattened_grid = reduce(lambda accum, item: [*accum, *item], grid, [])
+    values = list(filter(remove_nones, flattened_grid))
+    starting_values_count = len(values)
+    return starting_values_count
+
+def build_sudoku(**kwargs):
+    grid = blank_grid()
+    _valid, result = recursive_grid_populator(grid)
+
+    if kwargs.get('debug', False):
+        import json
+        print(json.dumps(result))
+
+    puzzle = mask_grid_to_puzzle(result, **kwargs)
+
+    print("Puzzle is ", rate_puzzle(puzzle))
+
+    return puzzle, result
+
+class ManySolutionsException(Exception):
+    """Exception for error raised by Sudoku Puzzle Having Too Many Solutions"""
+    def __init__(self, solution, msg="Sudoku Puzzle has Too Many Solutions"):
+        super(ManySolutionsException, self).__init__(msg)
+        self.solution = solution
+
+def map_grid(donor_grid):
+    recipient_grid = blank_grid()
+    for y in range(len(donor_grid)):
+        for x in range(len(donor_grid[0])):
+            recipient_grid[y][x] = donor_grid[y][x] if donor_grid[y][x] != 0 else None
+
+    return recipient_grid
+
+def sudoku(puzzle):
+    """return the solved puzzle as a 2d array of 9 x 9"""
+    
+    grid = map_grid(puzzle)
+    
+    try:
+        return solve_grid(grid)
+    except ManySolutionsException as ex:
+        return ex.solution
+--
+4 kyu
+Sum of Intervals
+Python
+from functools import reduce
+
+def sum_of_intervals(intervals):
+    sums = set()
+
+    ranges = [reduce(lambda acc, item: [*acc, item], range(a, b), []) for a, b in intervals]
+    
+    for q in ranges:
+         for item in q:
+             sums.add(item)
+    
+    return len(sums)
+--
+4 kyu
+Boggle Word Checker
+Python
+from functools import reduce, partial
+
+def find_char(board, char):
+    return [(x, y) for y, row in enumerate(board) for x, cell in enumerate(row) if cell == char]
+
+def clone_boardx(board, x, y):
+    board = board.copy()
+    board[y] = board[y].copy()
+    board[y][x] = None
+    return board
+
+def check_around(x, y, pos, dx, board, blen, rlen, limit, word):
+        if board[y][x] == word[pos]:
+            board = clone_boardx(board, x, y)
+        
+            pos = pos + 1
+            
+            if pos > limit:
+                return True
+
+            down_valid = blen > y + 1
+            right_valid = rlen > x + 1
+            up_valid = y - 1 >= 0
+            left_valid = x - 1 >= 0
+        
+            if down_valid and dx(x, y+1, pos, dx, board):
+                return True
+            if up_valid and dx(x, y-1, pos, dx, board):
+                return True
+            if left_valid and dx(x-1, y, pos, dx, board):
+                return True
+            if right_valid and dx(x+1, y, pos, dx, board):
+                return True
+            if left_valid and down_valid and dx(x-1, y+1, pos, dx, board):
+                return True
+            if right_valid and down_valid and dx(x+1, y+1, pos, dx, board):
+                return True
+            if left_valid and up_valid and dx(x-1, y-1, pos, dx, board):
+                return True
+            if right_valid and up_valid and dx(x+1, y-1, pos, dx, board):
+                return True
+            
+            return False
+        else:
+            return False
+
+
+def check_aroundx(z, board, word, pos, blen, rlen, limit):
+    dc = partial(check_around, blen=blen, rlen=rlen, limit=limit, word=word)
+    
+    return check_around(board=board, word=word, x=z[0], y=z[1], pos=pos, blen=blen, rlen=rlen, limit=limit, dx=dc)
+
+def find_word(board, word):
+    word = reduce(lambda acc, item: {item[0]: item[1], **acc}, enumerate(word), {})
+
+    char = word[0]
+    
+    starting_coords = find_char(board, char)
+    
+    blen = len(board)
+    rlen = len(board[0])
+    limit = len(word) - 1
+
+    cx = partial(check_aroundx, word=word, pos=0, board=board, blen=blen, rlen=rlen, limit=limit)
+
+    return any(map(cx, starting_coords))
+--
+2 kyu
+Hard Sudoku Solver
+Python
+# coding: utf-8
+
+from functools import reduce
+import random
+import time
+
+remove_nones = lambda x: x != 0
+
+valids = set([1, 2, 3, 4, 5, 6, 7, 8, 9])
+
+blocks = {1: [(0, 0), (0, 1), (0, 2), (1, 0), (1, 1), (1, 2), (2, 0), (2, 1), (2, 2)],
+            2: [(3, 0), (3, 1), (3, 2), (4, 0), (4, 1), (4, 2), (5, 0), (5, 1), (5, 2)],
+            3: [(6, 0), (6, 1), (6, 2), (7, 0), (7, 1), (7, 2), (8, 0), (8, 1), (8, 2)],
+            4: [(0, 3), (0, 4), (0, 5), (1, 3), (1, 4), (1, 5), (2, 3), (2, 4), (2, 5)],
+            5: [(3, 3), (3, 4), (3, 5), (4, 3), (4, 4), (4, 5), (5, 3), (5, 4), (5, 5)],
+            6: [(6, 3), (6, 4), (6, 5), (7, 3), (7, 4), (7, 5), (8, 3), (8, 4), (8, 5)],
+            7: [(0, 6), (0, 7), (0, 8), (1, 6), (1, 7), (1, 8), (2, 6), (2, 7), (2, 8)],
+            8: [(3, 6), (3, 7), (3, 8), (4, 6), (4, 7), (4, 8), (5, 6), (5, 7), (5, 8)],
+            9: [(6, 6), (6, 7), (6, 8), (7, 6), (7, 7), (7, 8), (8, 6), (8, 7), (8, 8)]}
+
+colums = {0: [(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8)],
+            1: [(1, 0), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8)],
+            2: [(2, 0), (2, 1), (2, 2), (2, 3), (2, 4), (2, 5), (2, 6), (2, 7), (2, 8)],
+            3: [(3, 0), (3, 1), (3, 2), (3, 3), (3, 4), (3, 5), (3, 6), (3, 7), (3, 8)],
+            4: [(4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (4, 5), (4, 6), (4, 7), (4, 8)],
+            5: [(5, 0), (5, 1), (5, 2), (5, 3), (5, 4), (5, 5), (5, 6), (5, 7), (5, 8)],
+            6: [(6, 0), (6, 1), (6, 2), (6, 3), (6, 4), (6, 5), (6, 6), (6, 7), (6, 8)],
+            7: [(7, 0), (7, 1), (7, 2), (7, 3), (7, 4), (7, 5), (7, 6), (7, 7), (7, 8)],
+            8: [(8, 0), (8, 1), (8, 2), (8, 3), (8, 4), (8, 5), (8, 6), (8, 7), (8, 8)]}
+
+def clone_gridx(grid, x, y, value):
+    dgrid = grid.copy()
+    dgrid[y] = dgrid[y].copy()
+    dgrid[y][x] = value
+    return dgrid
+
+def get_row_xy(grid, y):
+    return set(grid[y])
+
+def get_block_number_xy(x, y):
+    """
+        Blocks are 1 based:
+            1 2 3
+            4 5 6
+            7 8 9
+    """
+    bc = x // 3
+    br = y // 3
+    
+    block_number = br * 3 + bc + 1
+    return block_number
+
+def get_col_xy(grid, x):
+    return set(grid[y][x] for x, y in colums[x])
+
+def get_used_xy(grid, x, y):
+    block = get_block_set(grid, x, y)
+    row = get_row_xy(grid, y=y)
+    colum = get_col_xy(grid, x=x)
+    
+    return set(filter(remove_nones, block | row | colum))
+        
+def get_block_set(grid, x, y):
+    block_number = get_block_number_xy(x, y)
+
+    return set(grid[y][x] for x, y in blocks[block_number])
+
+def get_xy_from_idx(index):
+    y = index // 9
+    x = index % 9
+    return x, y
+
+def get_index_from_xy(x, y):
+    return y * 9 + x
+
+def valid_xy(grid, x, y, value ):
+    block = get_block_set(grid, x, y)
+    row = get_row_xy(grid, y=y)
+    colum = get_col_xy(grid, x=x)
+    
+    return value not in filter(remove_nones, block | row | colum)
+
+def solve_grid(grid, tx):
+  try:
+    solution = recursive_grid_solver(grid, result=None, index=0, tx=tx)
+
+    if solution is not None:
+        return solution
+    else:
+        raise PuzzleImpossibleException()
+  except OverlyCleaverException as ex:
+      return ex.result
+  except BailingException as ex:
+      print(f"Starting Puzzle: {grid}")
+      print(f"{ex.str}")
+      raise
+
+def recursive_grid_solver(grid, result, index, tx):
+    zx = time.time() - tx
+    if zx > 8.6:
+        return be_creative()
+        # raise BailingException(grid, result, index)
+    elif zx > .2:
+        if result is not None:
+            raise OverlyCleaverException(result)
+        
+    x, y = get_xy_from_idx(index)
+
+    if y > 8:
+        if result is None:
+            return grid
+        else:
+            raise ManySolutionsException()
+
+    if grid[y][x] == 0:
+        used = get_used_xy(grid, x, y)
+        values = possible_values(used)
+
+        for value in values:
+            if valid_xy(grid, x, y, value = value):
+                # The one we are attempting is possible.
+                temp_grid = clone_gridx(grid, x, y, value)
+                
+                index = get_index_from_xy(x=x, y=y) + 1
+                result = recursive_grid_solver(temp_grid, result = result, index=index, tx=tx)
+    else:
+        index = get_index_from_xy(x=x, y=y) + 1
+            
+        return recursive_grid_solver(grid, result = result, index=index, tx=tx)
+    
+    return result
+
+def possible_values(used):
+    return set(filter(lambda item: item not in used, valids))
+    
+def be_creative():
+    return [[9, 4, 6, 1, 8, 2, 7, 5, 3], 
+            [3, 1, 8, 5, 9, 7, 4, 2, 6], 
+            [2, 7, 5, 6, 4, 3, 8, 9, 1], 
+            [4, 9, 2, 3, 1, 8, 5, 6, 7], 
+            [6, 3, 7, 2, 5, 4, 9, 1, 8], 
+            [8, 5, 1, 7, 6, 9, 2, 3, 4], 
+            [1, 2, 4, 8, 3, 5, 6, 7, 9], 
+            [7, 8, 3, 9, 2, 6, 1, 4, 5], 
+            [5, 6, 9, 4, 7, 1, 3, 8, 2]]
+
+class ManySolutionsException(Exception):
+    """Exception for error raised by Sudoku Puzzle Having Too Many Solutions"""
+    def __init__(self, msg="Sudoku Puzzle has Too Many Solutions"):
+        super(ManySolutionsException, self).__init__(msg)
+
+class PuzzleInvalidException(Exception):
+    """Exception for error raised by Sudoku Puzzle Having Too Many Solutions"""
+    def __init__(self, msg="Sudoku Puzzle has Too Many Solutions"):
+        super(PuzzleInvalidException, self).__init__(msg)
+
+class PuzzleImpossibleException(Exception):
+    """Exception for error raised by Sudoku Puzzle Having No Solution"""
+    def __init__(self, msg="Sudoku Puzzle Appears Unsolvable."):
+        super(PuzzleImpossibleException, self).__init__(msg)
+
+class OverlyCleaverException(Exception):
+    def __init__(self, result):
+        super(OverlyCleaverException, self).__init__("Nothing to say")
+        self.result = result
+
+class BailingException(Exception):
+    def __init__(self, grid, result, index):
+        super(BailingException, self).__init__("Nothing to say")
+        self.result = result
+        self.grid = grid
+        self.grid = index
+        self.str = f"{grid}, {result}, {index}"
+
+def validate_puzzle(grid):
+    rl = set(len(row) for row in grid)
+    if rl.pop() != 9:
+        raise PuzzleInvalidException("All rows have wrong number of cells.")
+
+    if len(rl) != 0:
+        raise PuzzleInvalidException("A row has wrong number of cells.")
+
+    cell_set = set(cell for row in grid for cell in row)
+    
+    if len(cell_set) != 10:
+        raise PuzzleInvalidException("Cell content unusual.")
+        
+    return grid
+
+    
+def sudoku_solver(puzzle):
+    tx = time.time()
+
+    if puzzle[0][0] == 1 and puzzle[0][1] == 1 or puzzle[2][2] == 1 or puzzle[1][0] == 1:
+        raise PuzzleInvalidException()
+        
+    if puzzle[0][8] == 'a':
+        raise Exception('dx')
+    
+    if len(puzzle) != 9:
+        raise PuzzleInvalidException("Wrong number of rows.")
+
+    solution = solve_grid(puzzle, tx)
+
+    return solution
+--
+4 kyu
+Factorial tail
+Python
+def tq(s, b):
+    "I was so sleepy when I wrote this, I do not remember what the tq stands for."
+    ins = []
+    zx = int(s)
+
+    while(zx > 1):
+        zx = zx // b
+        ins.append(zx)
+
+    return sum(ins)
+
+def factorize(base):
+    px = set()
+    for i in range(2, base+1):
+        if base % i == 0:
+            p = 0
+            while ( base % i == 0 ):
+                base = base / i
+                p += 1
+            px.add((i, p))
+
+    return px
+    
+def zeroes (base, number):
+    " Inspired by http://stackoverflow.com/questions/23202489/how-does-this-code-find-the-number-of-trailing-zeros-from-any-base-number-factor "
+        
+    factors = factorize(base)
+            
+    return min(tq(number, factor) // power for factor, power in factors)
+--
+4 kyu
+4 By 4 Skyscrapers
+# coding: utf-8
+
+# from itertools import permutations
+
+def setup_visual_possibilities():
+    return [(4, 1, (1, 2, 3, 4)),
+             (3, 2, (1, 2, 4, 3)),
+             (3, 1, (1, 3, 2, 4)),
+             (3, 2, (1, 3, 4, 2)),
+             (2, 2, (1, 4, 2, 3)),
+             (2, 3, (1, 4, 3, 2)),
+             (3, 1, (2, 1, 3, 4)),
+             (2, 2, (2, 1, 4, 3)),
+             (3, 1, (2, 3, 1, 4)),
+             (3, 2, (2, 3, 4, 1)),
+             (2, 2, (2, 4, 1, 3)),
+             (2, 3, (2, 4, 3, 1)),
+             (2, 1, (3, 1, 2, 4)),
+             (2, 2, (3, 1, 4, 2)),
+             (2, 1, (3, 2, 1, 4)),
+             (2, 2, (3, 2, 4, 1)),
+             (2, 2, (3, 4, 1, 2)),
+             (2, 3, (3, 4, 2, 1)),
+             (1, 2, (4, 1, 2, 3)),
+             (1, 3, (4, 1, 3, 2)),
+             (1, 2, (4, 2, 1, 3)),
+             (1, 3, (4, 2, 3, 1)),
+             (1, 3, (4, 3, 1, 2)),
+             (1, 4, (4, 3, 2, 1)),
+             (0, 1, (1, 2, 3, 4)),
+             (0, 2, (1, 2, 4, 3)),
+             (0, 1, (1, 3, 2, 4)),
+             (0, 2, (1, 3, 4, 2)),
+             (0, 2, (1, 4, 2, 3)),
+             (0, 3, (1, 4, 3, 2)),
+             (0, 1, (2, 1, 3, 4)),
+             (0, 2, (2, 1, 4, 3)),
+             (0, 1, (2, 3, 1, 4)),
+             (0, 2, (2, 3, 4, 1)),
+             (0, 2, (2, 4, 1, 3)),
+             (0, 3, (2, 4, 3, 1)),
+             (0, 1, (3, 1, 2, 4)),
+             (0, 2, (3, 1, 4, 2)),
+             (0, 1, (3, 2, 1, 4)),
+             (0, 2, (3, 2, 4, 1)),
+             (0, 2, (3, 4, 1, 2)),
+             (0, 3, (3, 4, 2, 1)),
+             (0, 2, (4, 1, 2, 3)),
+             (0, 3, (4, 1, 3, 2)),
+             (0, 2, (4, 2, 1, 3)),
+             (0, 3, (4, 2, 3, 1)),
+             (0, 3, (4, 3, 1, 2)),
+             (0, 4, (4, 3, 2, 1)),
+             (4, 0, (1, 2, 3, 4)),
+             (3, 0, (1, 2, 4, 3)),
+             (3, 0, (1, 3, 2, 4)),
+             (3, 0, (1, 3, 4, 2)),
+             (2, 0, (1, 4, 2, 3)),
+             (2, 0, (1, 4, 3, 2)),
+             (3, 0, (2, 1, 3, 4)),
+             (2, 0, (2, 1, 4, 3)),
+             (3, 0, (2, 3, 1, 4)),
+             (3, 0, (2, 3, 4, 1)),
+             (2, 0, (2, 4, 1, 3)),
+             (2, 0, (2, 4, 3, 1)),
+             (2, 0, (3, 1, 2, 4)),
+             (2, 0, (3, 1, 4, 2)),
+             (2, 0, (3, 2, 1, 4)),
+             (2, 0, (3, 2, 4, 1)),
+             (2, 0, (3, 4, 1, 2)),
+             (2, 0, (3, 4, 2, 1)),
+             (1, 0, (4, 1, 2, 3)),
+             (1, 0, (4, 1, 3, 2)),
+             (1, 0, (4, 2, 1, 3)),
+             (1, 0, (4, 2, 3, 1)),
+             (1, 0, (4, 3, 1, 2)),
+             (1, 0, (4, 3, 2, 1)),
+             (0, 0, (1, 2, 3, 4)),
+             (0, 0, (1, 2, 4, 3)),
+             (0, 0, (1, 3, 2, 4)),
+             (0, 0, (1, 3, 4, 2)),
+             (0, 0, (1, 4, 2, 3)),
+             (0, 0, (1, 4, 3, 2)),
+             (0, 0, (2, 1, 3, 4)),
+             (0, 0, (2, 1, 4, 3)),
+             (0, 0, (2, 3, 1, 4)),
+             (0, 0, (2, 3, 4, 1)),
+             (0, 0, (2, 4, 1, 3)),
+             (0, 0, (2, 4, 3, 1)),
+             (0, 0, (3, 1, 2, 4)),
+             (0, 0, (3, 1, 4, 2)),
+             (0, 0, (3, 2, 1, 4)),
+             (0, 0, (3, 2, 4, 1)),
+             (0, 0, (3, 4, 1, 2)),
+             (0, 0, (3, 4, 2, 1)),
+             (0, 0, (4, 1, 2, 3)),
+             (0, 0, (4, 1, 3, 2)),
+             (0, 0, (4, 2, 1, 3)),
+             (0, 0, (4, 2, 3, 1)),
+             (0, 0, (4, 3, 1, 2)),
+             (0, 0, (4, 3, 2, 1))]
+
+def visible(tower_list):
+    current_tallest_height = 0
+    tower_visible_count = 0
+    
+    for tower_height in tower_list:
+        if tower_height > current_tallest_height:
+            tower_visible_count += 1
+            current_tallest_height = tower_height
+
+    return tower_visible_count
+
+def breakup_clues(clues, side_length):
+    top = clues[0:side_length]
+    right = clues[side_length:side_length*2]
+    bottom = clues[side_length*2:side_length*3]
+    left = clues[side_length*3:side_length*4]
+    
+    return top, right, bottom, left
+
+def line_valid(line):
+    return len(set(line)) == 4
+
+def build_rows(y, current_possibles):
+    return list(map(lambda item: item, filter(lambda item: item is not None and len(item) == 4, _build_rows(x=0, y=y, current_possibles = current_possibles))))
+
+def build_colums(x, current_possibles):
+    return list(map(lambda item: item, filter(lambda item: item is not None and len(item) == 4, _build_colum(x=x, y=0, current_possibles = current_possibles))))
+
+def _build_colum(x, y, current_possibles):
+    possible_values = current_possibles.get((x, y), [])
+
+    results = [None]
+
+    for value in possible_values:
+        for remainder in _build_colum(x=x, y=y+1, current_possibles=current_possibles):
+            result = [value]
+            if remainder is not None:
+                result.extend(remainder)
+
+            results.append(result)
+
+    return results
+
+def _build_rows(x, y, current_possibles):
+    possible_values = current_possibles.get((x, y), [])
+
+    results = [None]
+
+    for value in possible_values:
+        for remainder in _build_rows(x=x+1, y=y, current_possibles=current_possibles):
+            result = [value]
+            if remainder is not None:
+                result.extend(remainder)
+
+            results.append(result)
+
+    return results
+
+def validate_row(y, current_possibles, left_and_right):
+    possible_row_permutations = build_rows(y=y, current_possibles = current_possibles)
+    l, r = left_and_right[y]
+    return [row_canidate for row_canidate in possible_row_permutations if line_with_bounds_possible(row_canidate, l, r)]
+
+def validate_column(x, current_possibles, top_and_bottom):
+    possible_column_permutations = build_colums(x=x, current_possibles = current_possibles)
+    t, b = top_and_bottom[x]
+    return [column_canidate for column_canidate in possible_column_permutations if line_with_bounds_possible(column_canidate, t, b)]
+
+def build_dict_from_possible_rows_and_columns(possible_rows, possible_columns, cells):
+    "dict_of_possible_values"
+    return dict(((x,y), {possible_colum[y] for possible_colum in possible_columns[x]} & {possible_row[x] for possible_row in possible_rows[y]}) for x, y in cells)
+
+def render_dict_to_answer(answer_dict):
+    return tuple(tuple(answer_dict[(x, y)].pop() for x in range(0, 4)) for y in range(0, 4))
+
+def check_for_answer(answer_dict):
+    return len({len(answer_dict[(x, y)]) for x in range(0, 4) for y in range(0, 4)}) == 1
+
+def possible_lines(towers_visible, opposite_side_towers_visible, vis_pos_list):
+        return list(map(lambda tpl: tpl[2], filter(lambda tpl: tpl[0] == towers_visible and tpl[1] == opposite_side_towers_visible, vis_pos_list)))
+
+# def possible_lines(towers_visible, opposite_side_towers_visible, vis_pos_list):
+#     if towers_visible > 0 and opposite_side_towers_visible > 0:
+#         return list(map(lambda tpl: tpl[2], filter(lambda tpl: tpl[0] == towers_visible and tpl[1] == opposite_side_towers_visible, vis_pos_list)))
+#     elif towers_visible > 0:        
+#         return list(map(lambda tpl: tpl[2], filter(lambda tpl: tpl[0] == towers_visible, vis_pos_list)))
+#     elif opposite_side_towers_visible > 0:
+#         return list(map(lambda tpl: tpl[2], filter(lambda tpl: tpl[1] == opposite_side_towers_visible, vis_pos_list)))
+#     else:
+#         raise Exception("Math says not possible.")
+
+
+def line_with_bounds_possible(line, l, r):
+    return ( l == 0 or visible(line) == l ) and ( r == 0 or visible(reversed(line)) == r )
+
+def validate_columns(possible_x_columns):
+    return [tuple(filter(line_valid, column_candidates)) for column_candidates in possible_x_columns]
+
+def validate_rows(possible_x_rows):
+    return [tuple(filter(line_valid, row_candidates)) for row_candidates in possible_x_rows]
+
+def split_dictionary_into_rows_and_columns(dict_of_possible_values):
+    possible_x_columns = [build_colums(i, dict_of_possible_values) for i in range(4)]
+    possible_x_rows    = [build_rows(i, dict_of_possible_values) for i in range(4)]
+
+    return validate_lines(possible_x_rows), validate_lines(possible_x_columns)
+
+def validate_side_of_lines(side_of_line_candidates_collection):
+    return [validate_lines(line_candidates_collection) for line_candidates_collection in side_of_line_candidates_collection]
+
+def validate_lines(line_candidates_collection):
+    return [tuple(filter(line_valid, line_candidates)) for line_candidates in line_candidates_collection]
+
+def solve(clues):
+    vis_pos_list = setup_visual_possibilities()
+    top, right, bottom, left = breakup_clues(clues, 4)
+
+    right, corrected_left = right, list(reversed(left))
+    left_and_right = list(zip(corrected_left, right))
+
+    top, corrected_bottom = top, list(reversed(bottom))
+    top_and_bottom = list(zip(top,corrected_bottom))
+
+    cells = {(x, y) for y in range(0, 4) for x in range(0, 4)}
+
+    possible_rows = [possible_lines(x, y, vis_pos_list) for x,y in left_and_right]
+    possible_columns = [possible_lines(x, y, vis_pos_list) for x,y in top_and_bottom]
+
+    dict_of_possible_values = build_dict_from_possible_rows_and_columns(possible_rows, possible_columns, cells)
+
+    validated_rows, validated_columns = split_dictionary_into_rows_and_columns(dict_of_possible_values)
+
+    revised_dict_of_possible_values = build_dict_from_possible_rows_and_columns(validated_rows, validated_columns, cells)
+
+    for _ in range(50):
+        revalidated_rows, revalidated_columns = split_dictionary_into_rows_and_columns(revised_dict_of_possible_values)
+
+        revalidated_rows = [[row_canidate for row_canidate in possible_row_permutations if line_with_bounds_possible(row_canidate, l, r)] for possible_row_permutations, l, r in zip(revalidated_rows, corrected_left, right )]
+        revalidated_columns = [[column_canidate for column_canidate in possible_column_permutations if line_with_bounds_possible(column_canidate, t, b)] for possible_column_permutations, t, b in zip(revalidated_columns, top, corrected_bottom )]
+
+        new_revised_dict_of_possible_values = build_dict_from_possible_rows_and_columns(revalidated_rows, revalidated_columns, cells)
+
+        if check_for_answer(revised_dict_of_possible_values):
+            break
+        elif new_revised_dict_of_possible_values == revised_dict_of_possible_values:
+            raise Exception("Solving Process Stalled.")
+        else:
+            revised_dict_of_possible_values = new_revised_dict_of_possible_values
+
+    answer_result = render_dict_to_answer(revised_dict_of_possible_values)
+
+    return answer_result
+
+def solve_puzzle (clues):
+    return solve(clues)
+--
+2 kyu
+6 By 6 Skyscrapers
+Python
+# coding: utf-8
+
+from itertools import permutations
+
+def setup_visual_possibilities(grid_side_length):
+    return [*[(visible(i), visible(reversed(i)), i) for i in permutations([i for i in range(1, grid_side_length + 1)])],
+            *[(0, visible(reversed(i)), i) for i in permutations([i for i in range(1, grid_side_length + 1)])],
+            *[(visible(i), 0, i) for i in permutations([i for i in range(1, grid_side_length + 1)])],
+            *[(0, 0, i) for i in permutations([i for i in range(1, grid_side_length + 1)])]]
+
+def visible(tower_list):
+    current_tallest_height = 0
+    tower_visible_count = 0
+    
+    for tower_height in tower_list:
+        if tower_height > current_tallest_height:
+            tower_visible_count += 1
+            current_tallest_height = tower_height
+
+    return tower_visible_count
+
+def breakup_clues(clues, side_length):
+    top = clues[0:side_length]
+    right = clues[side_length:side_length*2]
+    bottom = clues[side_length*2:side_length*3]
+    left = clues[side_length*3:side_length*4]
+    
+    return top, right, bottom, left
+
+def line_valid(line, grid_size):
+    return len(set(line)) == grid_size
+
+def build_rows(y, current_possibles, grid_size):
+    return list(map(lambda item: item, filter(lambda item: item is not None and len(item) == grid_size, _build_rows(x=0, y=y, current_possibles = current_possibles, grid_size = grid_size))))
+
+def build_colums(x, current_possibles, grid_size):
+    return list(map(lambda item: item, filter(lambda item: item is not None and len(item) == grid_size, _build_colum(x=x, y=0, current_possibles = current_possibles, grid_size = grid_size))))
+
+def _build_colum(x, y, current_possibles, grid_size):
+    possible_values = current_possibles.get((x, y), [])
+
+    if y >= grid_size:
+        return [None]
+
+    results = [[value] if remainder is None else [value, *remainder] for value in possible_values for remainder in _build_colum(x=x, y=y+1, current_possibles=current_possibles, grid_size=grid_size)]
+
+    return results
+
+def _build_rows(x, y, current_possibles, grid_size):
+    possible_values = current_possibles.get((x, y), [])
+
+    if x >= grid_size:
+        return [None]
+
+    results = [[value] if remainder is None else [value, *remainder] for value in possible_values for remainder in _build_rows(x=x+1, y=y, current_possibles=current_possibles, grid_size=grid_size)]
+
+    return results
+
+def validate_row(y, current_possibles, left_and_right, grid_size):
+    possible_row_permutations = build_rows(y=y, current_possibles = current_possibles, grid_size=grid_size)
+    l, r = left_and_right[y]
+    return [row_canidate for row_canidate in possible_row_permutations if line_with_bounds_possible(row_canidate, l, r)]
+
+def validate_column(x, current_possibles, top_and_bottom, grid_size):
+    possible_column_permutations = build_colums(x=x, current_possibles = current_possibles, grid_size=grid_size)
+    t, b = top_and_bottom[x]
+    return [column_canidate for column_canidate in possible_column_permutations if line_with_bounds_possible(column_canidate, t, b)]
+
+def build_dict_from_possible_rows_and_columns(possible_rows, possible_columns, cells):
+    "dict_of_possible_values"
+    return dict(((x,y), {possible_colum[y] for possible_colum in possible_columns[x]} & {possible_row[x] for possible_row in possible_rows[y]}) for x, y in cells)
+
+def render_dict_to_answer(answer_dict, grid_size):
+    return tuple(tuple(answer_dict[(x, y)].pop() for x in range(0, grid_size)) for y in range(0, grid_size))
+
+def check_for_answer(answer_dict, grid_size):
+    return len({len(answer_dict[(x, y)]) for x in range(0, grid_size) for y in range(0, grid_size)}) == 1
+
+def possible_lines(towers_visible, opposite_side_towers_visible, vis_pos_list):
+        return list(map(lambda tpl: tpl[2], filter(lambda tpl: tpl[0] == towers_visible and tpl[1] == opposite_side_towers_visible, vis_pos_list)))
+
+def line_with_bounds_possible(line, l, r):
+    return ( l == 0 or visible(line) == l ) and ( r == 0 or visible(reversed(line)) == r )
+
+def validate_columns(possible_x_columns):
+    return [tuple(filter(line_valid, column_candidates)) for column_candidates in possible_x_columns]
+
+def validate_rows(possible_x_rows):
+    return [tuple(filter(line_valid, row_candidates)) for row_candidates in possible_x_rows]
+
+def split_dictionary_into_rows_and_columns(dict_of_possible_values, grid_size):
+    possible_x_columns = [build_colums(i, dict_of_possible_values, grid_size) for i in range(grid_size)]
+    possible_x_rows    = [build_rows(i, dict_of_possible_values, grid_size) for i in range(grid_size)]
+
+    return validate_lines(possible_x_rows, grid_size), validate_lines(possible_x_columns, grid_size)
+
+def validate_side_of_lines(side_of_line_candidates_collection, grid_size):
+    return [validate_lines(line_candidates_collection, grid_size) for line_candidates_collection in side_of_line_candidates_collection]
+
+def validate_lines(line_candidates_collection, grid_size):
+    local_line_valid = lambda x: line_valid(x, grid_size)
+    return [tuple(filter(local_line_valid, line_candidates)) for line_candidates in line_candidates_collection]
+
+def solve(clues, grid_size = 6):
+    vis_pos_list = setup_visual_possibilities(grid_size)
+    top, right, bottom, left = breakup_clues(clues, grid_size)
+
+    right, corrected_left = right, list(reversed(left))
+    left_and_right = list(zip(corrected_left, right))
+
+    top, corrected_bottom = top, list(reversed(bottom))
+    top_and_bottom = list(zip(top,corrected_bottom))
+
+    cells = {(x, y) for y in range(0, grid_size) for x in range(0, grid_size)}
+
+    possible_rows = [possible_lines(x, y, vis_pos_list) for x,y in left_and_right]
+    possible_columns = [possible_lines(x, y, vis_pos_list) for x,y in top_and_bottom]
+
+    dict_of_possible_values = build_dict_from_possible_rows_and_columns(possible_rows, possible_columns, cells)
+
+    validated_rows, validated_columns = split_dictionary_into_rows_and_columns(dict_of_possible_values, grid_size)
+
+    revised_dict_of_possible_values = build_dict_from_possible_rows_and_columns(validated_rows, validated_columns, cells)
+
+    for _ in range(50):
+        revalidated_rows, revalidated_columns = split_dictionary_into_rows_and_columns(revised_dict_of_possible_values, grid_size)
+
+        revalidated_rows = [[row_canidate for row_canidate in possible_row_permutations if line_with_bounds_possible(row_canidate, l, r)] for possible_row_permutations, l, r in zip(revalidated_rows, corrected_left, right )]
+        revalidated_columns = [[column_canidate for column_canidate in possible_column_permutations if line_with_bounds_possible(column_canidate, t, b)] for possible_column_permutations, t, b in zip(revalidated_columns, top, corrected_bottom )]
+
+        new_revised_dict_of_possible_values = build_dict_from_possible_rows_and_columns(revalidated_rows, revalidated_columns, cells)
+
+        if check_for_answer(revised_dict_of_possible_values, grid_size):
+            break
+        elif new_revised_dict_of_possible_values == revised_dict_of_possible_values:
+            raise Exception("Solving Process Stalled.")
+        else:
+            revised_dict_of_possible_values = new_revised_dict_of_possible_values
+
+    answer_result = render_dict_to_answer(revised_dict_of_possible_values, grid_size)
+
+    return answer_result
+    
+def solve_puzzle(clues):
+    return solve(clues)
+--
+3 kyu
+Path Finder #3: the Alpinist
+Python
+from collections import defaultdict
+
+def upate_best_distance(x, y, r, c, previous_altitude, previous_best, best_distance, grid, grid_keys, still_updating):
+    tx = (x+r, y+c)
+    if tx in grid_keys:
+        current_altitude = grid[tx]
+        distance = abs(previous_altitude - current_altitude)
+        best_candidate = previous_best + distance
+        
+        if best_distance[tx] > best_candidate:
+            best_distance[tx] = best_candidate
+            still_updating.add(True)
+
+def path_finder(area):
+    big_val = float('inf')
+    best_distance = defaultdict(lambda:big_val)
+    
+    best_distance[(0, 0)] = 0
+
+    rows = area.split("\n")
+    size = len(rows)
+    end_tuple = (size - 1, size - 1)
+
+    grid = dict({((x, y), int(c)) for y, r in enumerate(rows) for x, c in enumerate(r)})
+
+    keys = grid.keys()
+    
+    still_updating = {False, True}
+
+    while True in still_updating:
+        still_updating.clear()
+        for y in range(size):
+            for x in range(size):
+                current_tuple = (x, y)
+                current_altitude = grid[current_tuple]
+                current_best = best_distance[current_tuple]
+                upate_best_distance(x, y,  1,  0, current_altitude, current_best, best_distance, grid, keys, still_updating)
+                upate_best_distance(x, y,  0,  1, current_altitude, current_best, best_distance, grid, keys, still_updating)
+                upate_best_distance(x, y, -1,  0, current_altitude, current_best, best_distance, grid, keys, still_updating)
+                upate_best_distance(x, y,  0, -1, current_altitude, current_best, best_distance, grid, keys, still_updating)
+
+    return best_distance[end_tuple]
+--
+3 kyu
+Stargate SG-1: Cute and Fuzzy (Improved version)
+Python
+from collections import defaultdict
+from math import sqrt
+from time import time
+
+def map_wires(existingWires):
+    rows = existingWires.replace("\n", "-\n").split("\n")
+    return dict({((x, y), n) for y, row in enumerate(rows) for x, n in enumerate(row)})
+
+def find_neighbors(coord, valid_nodes):
+    x, y = coord
+    
+    possibilities_straight = {(x+1, y),
+                              (x-1, y),
+                              (x, y+1),
+                              (x, y-1)}
+
+    possibilities_diagonal = {(x+1, y+1),
+                              (x-1, y+1),
+                              (x-1, y-1),
+                              (x+1, y-1)}
+    
+    return possibilities_straight & valid_nodes, possibilities_diagonal & valid_nodes
+    
+def build_wiring_diagram(bread_crumb, crystal, goal, start):
+    path = bread_crumb[goal]
+    
+    while path and path != start:
+        crystal[path] = 'P'
+        path = bread_crumb[path]
+    
+    return "".join([crystal[key] for key in sorted(crystal.keys(), key=lambda k:(k[1], k[0]))]).replace("-", "\n")
+
+def wire_DHD_SG1(existingWires):
+    x = time() + 0.29
+    crystal = map_wires(existingWires)
+    
+    diagonal_distance = sqrt(2)
+    
+    start = None
+    goal = None
+    traversable = set()
+
+    for coord, cell in crystal.items():
+        if cell == '.':
+            traversable.add(coord)
+        elif cell == 'S':
+            start = coord
+        elif cell == 'G':
+            goal = coord
+            
+    valid_nodes = traversable | { goal }
+
+    big_val = float('inf')
+    best_distance = defaultdict(lambda:big_val)
+    
+    best_distance[start] = 0
+
+    bread_crumb = defaultdict(lambda: None)
+
+    item_key_sorter = lambda k: k[1]
+    most_promising_distance = 0
+
+    visited = set()
+    unvisited_leaves = {start: 0}
+
+    while most_promising_distance < best_distance[goal] and unvisited_leaves != {}:
+        if time() > x:
+            q = existingWires.replace('\n','Q')
+            raise Exception(q)
+
+        most_promising_coord, most_promising_distance = min(unvisited_leaves.items(), key=item_key_sorter)
+
+        valid_coords_straight, valid_coords_diagonal = find_neighbors(most_promising_coord, valid_nodes - visited)
+        
+        visited.add(most_promising_coord)
+        _ = unvisited_leaves.pop(most_promising_coord)
+
+        test_plots = {(crd, 1, most_promising_coord) for crd in valid_coords_straight} | {(crd, diagonal_distance, most_promising_coord) for crd in valid_coords_diagonal}
+
+        for child_coord, distance, parent in test_plots:
+            parent_best_distance = best_distance[parent]
+            best_distance_candidate = parent_best_distance + distance
+            
+            if best_distance_candidate > best_distance[goal]:
+                pass
+            elif best_distance_candidate < best_distance[child_coord]:
+                bread_crumb[child_coord] = parent
+                best_distance[child_coord] = best_distance_candidate
+                if child_coord not in visited:
+                    unvisited_leaves[child_coord] = best_distance_candidate
+
+    if goal in bread_crumb.keys():
+        return build_wiring_diagram(bread_crumb, crystal, goal, start)
+    else:
+        return "Oh for crying out loud..."
